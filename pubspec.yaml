@@ -11,8 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.2
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -24,7 +24,6 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-
   fonts:
     - family: Lato
       fonts:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/models/product.dart';
 
-// Configure global data products provider
+// Configure global data products provider (mix in with ChangeNotifier)
 class Products with ChangeNotifier {
   List<Product> _items = [
     Product(
@@ -41,6 +41,10 @@ class Products with ChangeNotifier {
   // Clone the items product
   List<Product> get items {
     return [..._items];
+  }
+
+  Product findBydId(String id) {
+    return _items.firstWhere((element) => element.id == id);
   }
 
   void addProduct(Product item) {

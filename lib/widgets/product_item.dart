@@ -17,7 +17,7 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
@@ -36,13 +36,17 @@ class ProductItem extends StatelessWidget {
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black38,
-          leading: IconButton(
-            icon: Icon(
-              product.isFavorite ? Icons.favorite : Icons.favorite_outline,
-            ),
-            iconSize: 14,
-            color: Theme.of(context).accentColor,
-            onPressed: product.toggleFavoriteStatus,
+          leading: Consumer<Product>(
+            builder: (_, product, child) {
+              return IconButton(
+                icon: Icon(
+                  product.isFavorite ? Icons.favorite : Icons.favorite_outline,
+                ),
+                iconSize: 14,
+                color: Theme.of(context).accentColor,
+                onPressed: product.toggleFavoriteStatus,
+              );
+            },
           ),
           trailing: IconButton(
             icon: const Icon(Icons.shopping_cart),

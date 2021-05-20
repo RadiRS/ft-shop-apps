@@ -32,4 +32,4 @@ flutter:
           weight: 700
     - family: Anton
       fonts:
-        - asset: assets/fonts/Anton-Reguler.ttf
+        - asset: assets/fonts/Anton-Regular.ttf

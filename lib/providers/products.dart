@@ -38,9 +38,12 @@ class Products with ChangeNotifier {
     ),
   ];
 
-  // Clone the items product
   List<Product> get items {
     return [..._items];
+  }
+
+  List<Product> get favoriteItems {
+    return _items.where((element) => element.isFavorite).toList();
   }
 
   Product findBydId(String id) {

@@ -4,7 +4,7 @@ import 'package:shop_app/providers/cart.dart';
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
 
-  List<OrderItem> get orders => [...orders];
+  List<OrderItem> get orders => [..._orders];
 
   void addOrder(List<CartItem> cartProducts, double total) {
     _orders.insert(

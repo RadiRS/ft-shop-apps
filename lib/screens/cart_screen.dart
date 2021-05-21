@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/cart.dart' show Cart;
+import 'package:shop_app/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
   static String routeName = '/cart';
@@ -13,12 +14,12 @@ class CartScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Cart'),
+        title: const Text('Your Cart'),
       ),
       body: Column(
         children: [
           Card(
-            margin: EdgeInsets.all(15),
+            margin: const EdgeInsets.all(15),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -26,7 +27,7 @@ class CartScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Total',
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                   ),
                   Spacer(),
                   Chip(
@@ -39,11 +40,25 @@ class CartScreen extends StatelessWidget {
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   TextButton(
-                    child: Text('ORDER NOW'),
+                    child: const Text('ORDER NOW'),
                     onPressed: () {},
                   )
                 ],
               ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: ListView.builder(
+              itemCount: cart.itemCount,
+              itemBuilder: (BuildContext context, int index) {
+                return CartItem(
+                  id: cart.items.values.toList()[index].id,
+                  title: cart.items.values.toList()[index].title,
+                  quantity: cart.items.values.toList()[index].quantity,
+                  price: cart.items.values.toList()[index].price,
+                );
+              },
             ),
           )
         ],

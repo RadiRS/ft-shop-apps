@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/providers/products.dart';
 import 'package:shop_app/screens/edit_product.screen.dart';
 
 class UserProductItem extends StatelessWidget {
@@ -37,7 +39,34 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.delete),
               color: Theme.of(context).errorColor,
-              onPressed: () {},
+              onPressed: () {
+                return showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: const Text('Are you sure?'),
+                      content: const Text(
+                          'Do you want to remove the item from the products?'),
+                      actions: [
+                        TextButton(
+                          child: const Text('No'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Yes'),
+                          onPressed: () {
+                            Provider.of<Products>(context, listen: false)
+                                .deleteProduct(id);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             )
           ],
         ),

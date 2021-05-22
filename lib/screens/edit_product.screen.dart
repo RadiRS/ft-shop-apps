@@ -109,7 +109,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _form.currentState.save();
 
     // Check if has a product id then update the product other wise created new product
-    print(_editedProduct.id);
     if (_editedProduct.id != null) {
       Provider.of<Products>(context, listen: false).updateProduct(
         _editedProduct.id,

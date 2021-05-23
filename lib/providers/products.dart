@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shop_app/providers/product.dart';
 
 // Configure global data products provider (mix in with ChangeNotifier)
@@ -50,18 +53,34 @@ class Products with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  void addProduct(Product item) {
-    final newProduct = Product(
-      id: DateTime.now().toString(),
-      title: item.title,
-      description: item.description,
-      price: item.price,
-      imageUrl: item.imageUrl,
-    );
+  Future<void> addProduct(Product item) {
+    Uri url = Uri.parse(
+        'https://e-ecommerce-firebase-v1.firebaseio.com/products.json');
 
-    _items.add(newProduct);
-    // _items.insert(0, newProduct); // at the start of the list
-    notifyListeners();
+    return http
+        .post(
+      url,
+      body: json.encode({
+        'title': item.title,
+        'description': item.description,
+        'imageUrl': item.imageUrl,
+        'price': item.price,
+        'isFavorite': item.isFavorite,
+      }),
+    )
+        .then((res) {
+      final newProduct = Product(
+        id: json.decode(res.body).toString(),
+        title: item.title,
+        description: item.description,
+        price: item.price,
+        imageUrl: item.imageUrl,
+      );
+
+      _items.add(newProduct);
+      // _items.insert(0, newProduct); // at the start of the list
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product item) {

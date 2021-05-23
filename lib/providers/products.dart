@@ -53,24 +53,24 @@ class Products with ChangeNotifier {
     return _items.firstWhere((element) => element.id == id);
   }
 
-  Future<void> addProduct(Product item) {
+  Future<void> addProduct(Product item) async {
     Uri url = Uri.parse(
         'https://e-ecommerce-firebase-v1.firebaseio.com/products.json');
 
-    return http
-        .post(
-      url,
-      body: json.encode({
-        'title': item.title,
-        'description': item.description,
-        'imageUrl': item.imageUrl,
-        'price': item.price,
-        'isFavorite': item.isFavorite,
-      }),
-    )
-        .then((res) {
+    try {
+      final res = await http.post(
+        url,
+        body: json.encode({
+          'title': item.title,
+          'description': item.description,
+          'imageUrl': item.imageUrl,
+          'price': item.price,
+          'isFavorite': item.isFavorite,
+        }),
+      );
+
       final newProduct = Product(
-        id: json.decode(res.body).toString(),
+        id: json.decode(res.body)['name'],
         title: item.title,
         description: item.description,
         price: item.price,
@@ -80,9 +80,9 @@ class Products with ChangeNotifier {
       _items.add(newProduct);
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
-    }).catchError((err) {
+    } catch (err) {
       throw err;
-    });
+    }
   }
 
   void updateProduct(String id, Product item) {

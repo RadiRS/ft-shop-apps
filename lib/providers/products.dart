@@ -120,12 +120,29 @@ class Products with ChangeNotifier {
     }
   }
 
-  void updateProduct(String id, Product item) {
+  Future<void> updateProduct(String id, Product item) async {
     final prodIndex = _items.indexWhere((element) => element.id == id);
 
     if (prodIndex >= 0) {
-      _items[prodIndex] = item;
-      notifyListeners();
+      final Uri url = Uri.parse(
+          'https://e-ecommerce-firebase-v1.firebaseio.com/products/$id.json');
+
+      try {
+        await http.patch(
+          url,
+          body: json.encode({
+            'title': item.title,
+            'description': item.description,
+            'imageUrl': item.imageUrl,
+            'price': item.price
+          }),
+        );
+
+        _items[prodIndex] = item;
+        notifyListeners();
+      } catch (e) {
+        throw e;
+      }
     } else {
       print('No Product');
     }

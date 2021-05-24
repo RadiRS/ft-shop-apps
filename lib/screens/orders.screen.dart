@@ -14,38 +14,61 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  bool _isLoading = false;
+  // bool _isLoading = false;
 
   @override
   void initState() {
-    initialRequest();
+    // initialRequest();
     super.initState();
   }
 
-  Future<void> initialRequest() async {
-    this.setState(() => _isLoading = true);
+  // Future<void> initialRequest() async {
+  //   this.setState(() => _isLoading = true);
 
-    await Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
+  //   await Provider.of<Orders>(context, listen: false).fetchAndSetOrders();
 
-    this.setState(() => _isLoading = false);
-  }
+  //   this.setState(() => _isLoading = false);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final ordersProv = Provider.of<Orders>(context);
+    // final ordersProv = Provider.of<Orders>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Orders'),
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator.adaptive())
-          : ListView.builder(
-              itemCount: ordersProv.orders.length,
-              itemBuilder: (BuildContext context, int index) {
-                return OrderItem(order: ordersProv.orders[index]);
-              },
-            ),
+      // Using a FutureBuilder widget only if the screen no needed to rebuild again
+      body: FutureBuilder(
+        future: Provider.of<Orders>(context, listen: false).fetchAndSetOrders(),
+        // initialData: InitialData,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator.adaptive());
+          } else {
+            if (snapshot.error != null) {
+              return Center(child: Text('An error accured'));
+            } else {
+              return Consumer<Orders>(builder: (_, ordersProv, child) {
+                return ListView.builder(
+                  itemCount: ordersProv.orders.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return OrderItem(order: ordersProv.orders[index]);
+                  },
+                );
+              });
+            }
+          }
+        },
+      ),
+      // body: _isLoading
+      //     ? Center(child: CircularProgressIndicator.adaptive())
+      //     : ListView.builder(
+      //         itemCount: ordersProv.orders.length,
+      //         itemBuilder: (BuildContext context, int index) {
+      //           return OrderItem(order: ordersProv.orders[index]);
+      //         },
+      //       ),
       drawer: AppDrawer(),
     );
   }

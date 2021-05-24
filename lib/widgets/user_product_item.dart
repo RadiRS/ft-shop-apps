@@ -56,10 +56,23 @@ class UserProductItem extends StatelessWidget {
                         ),
                         TextButton(
                           child: const Text('Yes'),
-                          onPressed: () {
-                            Provider.of<Products>(context, listen: false)
-                                .deleteProduct(id);
+                          onPressed: () async {
                             Navigator.of(context).pop();
+
+                            try {
+                              await Provider.of<Products>(
+                                context,
+                                listen: false,
+                              ).deleteProduct(id);
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(e.toString()),
+                                  backgroundColor: Theme.of(context).errorColor,
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                            }
                           },
                         ),
                       ],

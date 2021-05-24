@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop_app/models/http_exception.dart';
 import 'package:shop_app/providers/product.dart';
 
 // Configure global data products provider (mix in with ChangeNotifier)
@@ -148,8 +149,33 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((element) => element.id == id);
-    notifyListeners();
+  Future<void> deleteProduct(String id) async {
+    final Uri url = Uri.parse(
+        'https://e-ecommerce-firebase-v1.firebaseio.com/products/$id.json');
+
+    final existingProductIndex =
+        _items.indexWhere((element) => element.id == id);
+    var existingProduct = _items[existingProductIndex];
+
+    try {
+      _items.removeAt(existingProductIndex);
+
+      // * For res.statusCode delete request error doesn't set to catch
+      final res = await http.delete(url);
+
+      if (res.statusCode >= 400) {
+        throw HttpException('Could not delete product');
+      }
+
+      existingProduct = null;
+      notifyListeners();
+    } catch (e) {
+      // print(e);
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw e;
+    }
+
+    // _items.removeWhere((element) => element.id == id);
   }
 }

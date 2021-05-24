@@ -71,6 +71,12 @@ class Products with ChangeNotifier {
 
       final extractedData = jsonDecode as Map<String, dynamic>;
 
+      if (extractedData == null) {
+        _items = [];
+        notifyListeners();
+        return;
+      }
+
       extractedData.forEach((key, value) {
         loadedProducts.add(Product(
           id: key,
@@ -82,7 +88,7 @@ class Products with ChangeNotifier {
         ));
       });
 
-      _items = loadedProducts;
+      _items = loadedProducts.reversed.toList();
       notifyListeners();
     } catch (e) {
       throw e;

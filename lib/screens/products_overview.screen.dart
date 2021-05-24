@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/products.dart';
 import 'package:shop_app/screens/cart.screen.dart';
 import 'package:shop_app/widgets/app_drawer.dart';
 import 'package:shop_app/widgets/badge.dart';
@@ -15,6 +16,34 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showFavoritesOnly = false;
+  bool _isInit = true;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    // ! This is won't work because context not available in initState (can use listen: false to avoid)
+    // Provider.of<Products>(context).fetchAndSetProducts();
+    // * Or use this step
+    // Provider.of<Products>(context, listen: false).fetchAndSetProducts();
+    // Future.delayed(Duration.zero).then((_) {
+    //   Provider.of<Products>(context).fetchAndSetProducts();
+    // });
+    super.initState();
+  }
+
+  // * This method run after initState but before build method run;
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _isLoading = true;
+      Provider.of<Products>(context).fetchAndSetProducts().then((value) {
+        _isLoading = false;
+      });
+    }
+
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +91,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductsGrid(showFavs: _showFavoritesOnly),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator.adaptive())
+          : ProductsGrid(showFavs: _showFavoritesOnly),
     );
   }
 }

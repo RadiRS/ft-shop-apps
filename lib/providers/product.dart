@@ -21,7 +21,7 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Future<void> toggleFavoriteStatus() async {
+  Future<void> toggleFavoriteStatus(String token) async {
     final oldStatus = isFavorite;
 
     isFavorite = !isFavorite;
@@ -31,7 +31,7 @@ class Product with ChangeNotifier {
 
     try {
       final Uri url = Uri.parse(
-          'https://e-ecommerce-firebase-v1.firebaseio.com/products/$id.json');
+          'https://e-ecommerce-firebase-v1.firebaseio.com/products/$id.json?auth=$token');
 
       final res = await http.patch(
         url,

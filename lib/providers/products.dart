@@ -28,7 +28,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    Uri url = Uri.parse(
+    final Uri url = Uri.parse(
         'https://e-ecommerce-firebase-v1.firebaseio.com/products.json?auth=$authToken');
 
     // print(authToken);
@@ -52,8 +52,6 @@ class Products with ChangeNotifier {
         return;
       }
 
-      print(extractedData);
-
       extractedData.forEach((key, value) {
         loadedProducts.add(Product(
           id: key,
@@ -68,14 +66,13 @@ class Products with ChangeNotifier {
       _items = loadedProducts.reversed.toList();
       notifyListeners();
     } catch (e) {
-      print(e);
       throw e;
     }
   }
 
   Future<void> addProduct(Product item) async {
-    Uri url = Uri.parse(
-        'https://e-ecommerce-firebase-v1.firebaseio.com/products.json');
+    final Uri url = Uri.parse(
+        'https://e-ecommerce-firebase-v1.firebaseio.com/products.json?auth=$authToken');
 
     try {
       final res = await http.post(
@@ -110,7 +107,7 @@ class Products with ChangeNotifier {
 
     if (prodIndex >= 0) {
       final Uri url = Uri.parse(
-          'https://e-ecommerce-firebase-v1.firebaseio.com/products/$id.json');
+          'https://e-ecommerce-firebase-v1.firebaseio.com/products/$id.json?auth=$authToken');
 
       try {
         await http.patch(
@@ -135,7 +132,7 @@ class Products with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final Uri url = Uri.parse(
-        'https://e-ecommerce-firebase-v1.firebaseio.com/products/$id.json');
+        'https://e-ecommerce-firebase-v1.firebaseio.com/products/$id.json?auth=$authToken');
 
     final existingProductIndex =
         _items.indexWhere((element) => element.id == id);

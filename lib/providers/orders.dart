@@ -5,13 +5,19 @@ import 'package:http/http.dart' as http;
 import 'package:shop_app/providers/cart.dart';
 
 class Orders with ChangeNotifier {
+  final String authToken;
   List<OrderItem> _orders = [];
+
+  Orders(
+    this.authToken,
+    this._orders,
+  );
 
   List<OrderItem> get orders => [..._orders];
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    Uri url =
-        Uri.parse('https://e-ecommerce-firebase-v1.firebaseio.com/orders.json');
+    Uri url = Uri.parse(
+        'https://e-ecommerce-firebase-v1.firebaseio.com/orders.json?auth=$authToken');
     final timestamp = DateTime.now();
 
     try {
@@ -48,8 +54,8 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrders() async {
-    Uri url =
-        Uri.parse('https://e-ecommerce-firebase-v1.firebaseio.com/orders.json');
+    Uri url = Uri.parse(
+        'https://e-ecommerce-firebase-v1.firebaseio.com/orders.json?auth=$authToken');
 
     try {
       final List<OrderItem> loadedOrders = [];

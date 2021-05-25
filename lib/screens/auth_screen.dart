@@ -163,6 +163,7 @@ class _AuthCardState extends State<AuthCard> {
 
       _shoErrorDialog(errorMesage);
     } catch (e) {
+      print(e);
       const String errorMesage = 'Authentication failed';
 
       _shoErrorDialog(errorMesage);

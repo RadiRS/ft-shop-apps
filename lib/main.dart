@@ -3,11 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/orders.dart';
 import 'package:shop_app/providers/products.dart';
+import 'package:shop_app/screens/auth_screen.dart';
 import 'package:shop_app/screens/cart.screen.dart';
 import 'package:shop_app/screens/edit_product.screen.dart';
 import 'package:shop_app/screens/orders.screen.dart';
 import 'package:shop_app/screens/product_detail.screen.dart';
-import 'package:shop_app/screens/products_overview.screen.dart';
+// import 'package:shop_app/screens/products_overview.screen.dart';
 import 'package:shop_app/screens/user_products.screen.dart';
 
 void main() {
@@ -32,13 +33,15 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepOrangeAccent,
           fontFamily: 'Lato',
         ),
+        home: AuthScreen(),
         routes: {
-          '/': (_) => ProductsOverviewScreen(),
+          // '/': (_) => ProductsOverviewScreen(),
           ProductDetailScreen.routeName: (_) => ProductDetailScreen(),
           CartScreen.routeName: (_) => CartScreen(),
           OrdersScreen.routeName: (_) => OrdersScreen(),
           UserProductsScreen.routeName: (_) => UserProductsScreen(),
           EditProductScreen.routeName: (_) => EditProductScreen(),
+          AuthScreen.routeName: (_) => AuthScreen(),
         },
       ),
     );

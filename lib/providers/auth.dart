@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop_app/models/http_exception.dart';
 
 class Auth with ChangeNotifier {
   // String _token;
@@ -23,25 +24,21 @@ class Auth with ChangeNotifier {
         }),
       );
 
-      print(json.decode(res.body));
+      final jsonDecode = json.decode(res.body);
+
+      if (jsonDecode['error'] != null) {
+        throw HttpException(jsonDecode['error']['message']);
+      }
     } catch (e) {
       throw e;
     }
   }
 
   Future<void> signup(String email, String password) async {
-    try {
-      return _authentication(email, password, 'accounts:signUp');
-    } catch (e) {
-      throw e;
-    }
+    return _authentication(email, password, 'accounts:signUp');
   }
 
   Future<void> signin(String email, String password) async {
-    try {
-      return _authentication(email, password, 'accounts:signInWithPassword');
-    } catch (e) {
-      throw e;
-    }
+    return _authentication(email, password, 'accounts:signInWithPassword');
   }
 }

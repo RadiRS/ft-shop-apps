@@ -9,9 +9,9 @@ class Auth with ChangeNotifier {
   DateTime _expiryDate;
   String _userId;
 
-  bool get isAuth {
-    return token != null;
-  }
+  bool get isAuth => token != null;
+
+  String get userId => _userId;
 
   String get token {
     if (_expiryDate != null &&

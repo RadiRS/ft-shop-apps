@@ -8,10 +8,12 @@ import 'package:shop_app/providers/product.dart';
 // Configure global data products provider (mix in with ChangeNotifier)
 class Products with ChangeNotifier {
   final String authToken;
+  final String userId;
   List<Product> _items = [];
 
   Products(
     this.authToken,
+    this.userId,
     this._items,
   );
 
@@ -28,22 +30,13 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final Uri url = Uri.parse(
-        'https://e-ecommerce-firebase-v1.firebaseio.com/products.json?auth=$authToken');
-
-    // print(authToken);
-
     try {
+      // Get the products data
+      Uri url = Uri.parse(
+          'https://e-ecommerce-firebase-v1.firebaseio.com/products.json?auth=$authToken');
       final List<Product> loadedProducts = [];
       final res = await http.get(url);
       final jsonDecode = json.decode(res.body);
-
-      // * Print json data with beautiful format
-      // JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-      // String prettyprint = encoder.convert(jsonDecode);
-      // // print(json.decode(res.body));
-      // print(prettyprint);
-
       final extractedData = jsonDecode as Map<String, dynamic>;
 
       if (extractedData == null) {
@@ -52,6 +45,12 @@ class Products with ChangeNotifier {
         return;
       }
 
+      // Get favorites data
+      url = Uri.parse(
+          'https://e-ecommerce-firebase-v1.firebaseio.com/user-favorites/$userId.json?auth=$authToken');
+      final favRes = await http.get(url);
+      final favData = json.decode(favRes.body);
+
       extractedData.forEach((key, value) {
         loadedProducts.add(Product(
           id: key,
@@ -59,7 +58,8 @@ class Products with ChangeNotifier {
           description: value['description'],
           price: value['price'],
           imageUrl: value['imageUrl'],
-          isFavorite: value['isFavorite'],
+          // * the mark of (??) means if value is null then set to false
+          isFavorite: favData == null ? false : favData[key] ?? false,
         ));
       });
 
@@ -82,7 +82,6 @@ class Products with ChangeNotifier {
           'description': item.description,
           'imageUrl': item.imageUrl,
           'price': item.price,
-          'isFavorite': item.isFavorite,
         }),
       );
 

@@ -109,7 +109,7 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _shoErrorDialog(String message) {
+  void _showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (_) {
@@ -161,12 +161,12 @@ class _AuthCardState extends State<AuthCard> {
         errorMesage = 'Invalid password';
       }
 
-      _shoErrorDialog(errorMesage);
+      _showErrorDialog(errorMesage);
     } catch (e) {
       print(e);
       const String errorMesage = 'Authentication failed';
 
-      _shoErrorDialog(errorMesage);
+      _showErrorDialog(errorMesage);
     }
 
     setState(() => _isLoading = false);

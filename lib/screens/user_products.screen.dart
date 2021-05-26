@@ -34,7 +34,7 @@ class UserProductsScreen extends StatelessWidget {
         future: _refreshProducts(context),
         builder: (BuildContext _, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator.adaptive());
           } else {
             if (snapshot.error != null) {
               return Center(child: Text('An error accured'));

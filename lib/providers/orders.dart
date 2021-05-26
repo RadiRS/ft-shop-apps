@@ -6,56 +6,20 @@ import 'package:shop_app/providers/cart.dart';
 
 class Orders with ChangeNotifier {
   final String authToken;
+  final String userId;
   List<OrderItem> _orders = [];
 
   Orders(
     this.authToken,
+    this.userId,
     this._orders,
   );
 
   List<OrderItem> get orders => [..._orders];
 
-  Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    Uri url = Uri.parse(
-        'https://e-ecommerce-firebase-v1.firebaseio.com/orders.json?auth=$authToken');
-    final timestamp = DateTime.now();
-
-    try {
-      final res = await http.post(
-        url,
-        body: json.encode({
-          'amount': total,
-          'dateTime': timestamp.toIso8601String(),
-          'products': cartProducts
-              .map((e) => {
-                    'id': e.id,
-                    'title': e.title,
-                    'quantity': e.quantity,
-                    'price': e.price
-                  })
-              .toList(),
-        }),
-      );
-
-      _orders.insert(
-        0,
-        OrderItem(
-          id: json.decode(res.body)['name'],
-          amount: total,
-          products: cartProducts,
-          dateTime: DateTime.now(),
-        ),
-      );
-
-      notifyListeners();
-    } catch (e) {
-      throw e;
-    }
-  }
-
   Future<void> fetchAndSetOrders() async {
     Uri url = Uri.parse(
-        'https://e-ecommerce-firebase-v1.firebaseio.com/orders.json?auth=$authToken');
+        'https://e-ecommerce-firebase-v1.firebaseio.com/orders/$userId.json?auth=$authToken');
 
     try {
       final List<OrderItem> loadedOrders = [];
@@ -91,6 +55,44 @@ class Orders with ChangeNotifier {
       });
 
       _orders = loadedOrders;
+      notifyListeners();
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> addOrder(List<CartItem> cartProducts, double total) async {
+    Uri url = Uri.parse(
+        'https://e-ecommerce-firebase-v1.firebaseio.com/orders/$userId.json?auth=$authToken');
+    final timestamp = DateTime.now();
+
+    try {
+      final res = await http.post(
+        url,
+        body: json.encode({
+          'amount': total,
+          'dateTime': timestamp.toIso8601String(),
+          'products': cartProducts
+              .map((e) => {
+                    'id': e.id,
+                    'title': e.title,
+                    'quantity': e.quantity,
+                    'price': e.price
+                  })
+              .toList(),
+        }),
+      );
+
+      _orders.insert(
+        0,
+        OrderItem(
+          id: json.decode(res.body)['name'],
+          amount: total,
+          products: cartProducts,
+          dateTime: DateTime.now(),
+        ),
+      );
+
       notifyListeners();
     } catch (e) {
       throw e;

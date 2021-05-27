@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class CameraModule {
   final picker = ImagePicker();
   File _image;
-  Uri _uploadUrl = Uri.parse(
-      'https://api.imgbb.com/1/upload?key=34d071e53ba50b487e28439f9bc4ebc8');
+  Uri _uploadUrl = Uri.parse(env['FILE_UPLOAD_URL']);
 
   Future<File> getImageGallery() async {
     try {

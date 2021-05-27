@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/auth.dart';
@@ -13,7 +14,9 @@ import 'package:shop_app/screens/products_overview.screen.dart';
 import 'package:shop_app/screens/splash_screen.dart';
 import 'package:shop_app/screens/user_products.screen.dart';
 
-void main() {
+void main() async {
+  await DotEnv.load(fileName: ".env");
+
   runApp(MyApp());
 }
 

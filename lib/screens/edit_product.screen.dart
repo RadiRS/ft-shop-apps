@@ -1,9 +1,6 @@
-// import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/modules/camera.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/providers/products.dart';
 
@@ -18,13 +15,11 @@ class EditProductScreen extends StatefulWidget {
 
 class _EditProductScreenState extends State<EditProductScreen> {
   // Added focus listeners to the input
-  final picker = ImagePicker();
   final _priceFocuseNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
   // Set global key form to access the state of Form widget
   final _form = GlobalKey<FormState>();
-  File _image;
   bool _isLoaded = false;
   bool _isLoading = false;
 
@@ -159,16 +154,24 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   Future<void> _takePicture() async {
-    final picker = ImagePicker();
-    final imageFile = await picker.getImage(
-      source: ImageSource.gallery,
-      maxWidth: 600,
-      imageQuality: 0,
-    );
-
     setState(() {
-      if (imageFile != null) _image = File(imageFile.path);
+      _isLoading = true;
     });
+
+    try {
+      final img = await CameraModule().getImageUrl();
+
+      setState(() {
+        if (img != null) _imageUrlController.text = img["url"];
+
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print(e);
+    }
   }
 
   @override
@@ -293,12 +296,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             child: _imageUrlController.text.isEmpty
                                 ? const Text('Enter a URL or Select Image')
                                 : FittedBox(
-                                    child: _image != null
-                                        ? Image.file(_image)
-                                        : Image.network(
-                                            _imageUrlController.text,
-                                            fit: BoxFit.cover,
-                                          ),
+                                    child: Image.network(
+                                      _imageUrlController.text,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                           ),
                         ),

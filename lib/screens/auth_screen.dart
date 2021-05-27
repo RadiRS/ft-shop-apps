@@ -65,7 +65,7 @@ class AuthScreen extends StatelessWidget {
                         ],
                       ),
                       child: Text(
-                        'Shooppe',
+                        'Shoppe',
                         style: TextStyle(
                           color:
                               Theme.of(context).accentTextTheme.headline6.color,

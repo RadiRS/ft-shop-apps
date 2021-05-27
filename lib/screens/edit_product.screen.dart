@@ -1,4 +1,8 @@
+// import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/product.dart';
 import 'package:shop_app/providers/products.dart';
@@ -14,11 +18,13 @@ class EditProductScreen extends StatefulWidget {
 
 class _EditProductScreenState extends State<EditProductScreen> {
   // Added focus listeners to the input
+  final picker = ImagePicker();
   final _priceFocuseNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
   // Set global key form to access the state of Form widget
   final _form = GlobalKey<FormState>();
+  File _image;
   bool _isLoaded = false;
   bool _isLoading = false;
 
@@ -152,6 +158,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
     Navigator.of(context).pop();
   }
 
+  Future<void> _takePicture() async {
+    final picker = ImagePicker();
+    final imageFile = await picker.getImage(
+      source: ImageSource.gallery,
+      maxWidth: 600,
+      imageQuality: 0,
+    );
+
+    setState(() {
+      if (imageFile != null) _image = File(imageFile.path);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -256,27 +275,32 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                          width: 100,
-                          height: 100,
-                          margin: const EdgeInsets.only(
-                            top: 8,
-                            right: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
-                              color: Colors.grey,
+                        GestureDetector(
+                          onTap: _takePicture,
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            margin: const EdgeInsets.only(
+                              top: 8,
+                              right: 10,
                             ),
-                          ),
-                          child: _imageUrlController.text.isEmpty
-                              ? const Text('Enter a URL')
-                              : FittedBox(
-                                  child: Image.network(
-                                    _imageUrlController.text,
-                                    fit: BoxFit.cover,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            child: _imageUrlController.text.isEmpty
+                                ? const Text('Enter a URL or Select Image')
+                                : FittedBox(
+                                    child: _image != null
+                                        ? Image.file(_image)
+                                        : Image.network(
+                                            _imageUrlController.text,
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
-                                ),
+                          ),
                         ),
                         Expanded(
                           child: TextFormField(

@@ -163,7 +163,6 @@ class _AuthCardState extends State<AuthCard> {
 
       _showErrorDialog(errorMesage);
     } catch (e) {
-      print(e);
       const String errorMesage = 'Authentication failed';
 
       _showErrorDialog(errorMesage);

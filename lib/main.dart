@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      // statusBarColor: Colors.yellow,
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark,
+    ));
+
     // Setup notifier provider
     return MultiProvider(
       providers: [

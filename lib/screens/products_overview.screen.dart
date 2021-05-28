@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/products.dart';
@@ -51,6 +52,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        brightness: Brightness.dark,
         title: const Text('Online Shop'),
         actions: [
           PopupMenuButton(

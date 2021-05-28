@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/models/http_exception.dart';
 import 'package:shop_app/providers/auth.dart';
@@ -18,6 +19,12 @@ class AuthScreen extends StatelessWidget {
     // transformConfig.translate(-10.0);
     // * Simplify code using .. to return same format as above
     // Matrix4.rotationZ(-8 * pi / 180)..translate(-10.0);
+
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   // statusBarColor: Colors.yellow,
+    //   statusBarBrightness: Brightness.dark,
+    //   statusBarIconBrightness: Brightness.dark,
+    // ));
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,

@@ -5,6 +5,8 @@ workflows:
     max_build_duration: 60
     environment:
       flutter: stable
+      vars:
+        SECRET_ENV_VAR: Encrypted(QVBJX1VSTCA9IGh0dHBzOi8vZS1lY29tbWVyY2UtZmlyZWJhc2UtdjEuZmlyZWJhc2Vpby5jb20KQVVUSF9VUkwgPSBodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS92MQpGSUxFX1VQTE9BRF9VUkwgPSBodHRwczovL2FwaS5pbWdiYi5jb20vMS91cGxvYWQ/a2V5PTM0ZDA3MWU1M2JhNTBiNDg3ZTI4NDM5ZjliYzRlYmM4CkZJUkVCQVNFX0FQSV9LRVkgPSBBSXphU3lDT1FWRHVzU2tJUGpacVdsMFR0X2FDa2xvUVJWSWhidzgK)
     scripts:
       - name: Set up debug keystore
         script: |
@@ -22,6 +24,8 @@ workflows:
         script: echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - name: Get Flutter packages
         script: flutter packages pub get
+      - name: Set up environment
+        script: echo "$SECRET_ENV_VAR | base64 --decode" > "$FCI_BUILD_DIR/.env"
       - name: Build debug apk
         script: flutter build apk --debug
     artifacts:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/products.dart';
 import 'package:shop_app/screens/edit_product.screen.dart';
+import 'package:shop_app/size_config.dart';
 
 class UserProductItem extends StatelessWidget {
   final String id;
@@ -44,7 +45,10 @@ class UserProductItem extends StatelessWidget {
                   context: context,
                   builder: (_) {
                     return AlertDialog(
-                      title: const Text('Are you sure?'),
+                      title: Text(
+                        'Are you sure?',
+                        style: TextStyle(fontSize: normalizeText(22)),
+                      ),
                       content: const Text(
                           'Do you want to remove the item from the products?'),
                       actions: [

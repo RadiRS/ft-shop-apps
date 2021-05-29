@@ -47,7 +47,8 @@ class UserProductItem extends StatelessWidget {
                     return AlertDialog(
                       title: Text(
                         'Are you sure?',
-                        style: TextStyle(fontSize: normalizeText(22)),
+                        // style: TextStyle(fontSize: 32),
+                        style: TextStyle(fontSize: normalizeText(32)),
                       ),
                       content: const Text(
                           'Do you want to remove the item from the products?'),
